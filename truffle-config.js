@@ -46,8 +46,9 @@
 
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const fs = require('fs');
-const privateSecretKey = new Array(fs.readFileSync(".secret").toString());
+const privateSecretKey = new Array(fs.readFileSync(".secret").toString().trim());
 const alchemyProjectID = fs.readFileSync(".alchemy").toString().trim();
+const etherscanAPI = fs.readFileSync(".etherscan").toString().trim();
 
 module.exports = {
   /**
@@ -115,6 +116,11 @@ module.exports = {
     },
   },
 
+  plugins: ['truffle-plugin-verify'],
+  api_keys: {
+    etherscan: etherscanAPI
+  },
+
   // Set default mocha options here, use special reporters, etc.
   mocha: {
     // timeout: 100000
@@ -123,15 +129,15 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.8.17" // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.8.17", // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
-      // settings: {          // See the solidity docs for advice about optimization and evmVersion
-      //  optimizer: {
-      //    enabled: false,
-      //    runs: 200
-      //  },
+      settings: {          // See the solidity docs for advice about optimization and evmVersion
+       optimizer: {
+         enabled: false,
+         runs: 200
+       },
       //  evmVersion: "byzantium"
-      // }
+      }
     }
   }
 
